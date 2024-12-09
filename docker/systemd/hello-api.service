@@ -1,0 +1,22 @@
+[Unit]
+Description=Hello API Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/hello-api
+WorkingDirectory=/app
+Restart=always
+RestartSec=5s
+EnvironmentFile=/etc/hello-api.env
+TimeoutStopSec=30
+LimitNOFILE=4096
+
+# Enable graceful shutdown
+KillSignal=SIGTERM
+SendSIGKILL=no
+Type=simple
+TimeoutStartSec=20
+ExecStop=/bin/kill -SIGTERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

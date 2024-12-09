@@ -1,0 +1,41 @@
+services:
+  hello-api:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: go-api-local:latest
+    ports:
+      - "${APP_PORT}:8080"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    environment:
+      - APP_PORT=8080  # Указываем порт приложения
+    command: ["air"]  # Запускаем через Air
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

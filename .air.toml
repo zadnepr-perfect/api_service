@@ -1,0 +1,8 @@
+# Config file for Air
+root = "."
+tmp_dir = "tmp"
+build = "go build -o ./tmp/main ./cmd/server"
+bin = "tmp/main"
+include_ext = ["go"]
+exclude_dir = ["vendor", "tmp"]
+watch_delay = 500
