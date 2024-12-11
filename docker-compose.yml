@@ -3,7 +3,7 @@ services:
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    image: go-api-local:latest
+    image: zadnepr/go-api-test:latest
     ports:
       - "${APP_PORT}:8080"
     env_file:

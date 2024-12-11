@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: hello-api-config
-data:
-  config.json: |
-    {
-      "message": "My friend"
-    }

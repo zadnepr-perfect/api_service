@@ -21,6 +21,7 @@ func main() {
 	e := echo.New()
 
 	// Регистрация обработчика для endpoint /hello
+	e.GET("/", api.IndexHandler)
 	e.GET("/hello", api.HelloHandler)
 
 	// Запуск сервера с graceful shutdown

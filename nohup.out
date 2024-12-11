@@ -1,0 +1,28 @@
+* Mounting host path /Users/andeyzadneprianiy/Development/go/api into VM as /mnt/data ...
+  - Mount type:   9p
+  - User ID:      docker
+  - Group ID:     docker
+  - Version:      9p2000.L
+  - Message Size: 262144
+  - Options:      map[]
+  - Bind Address: 127.0.0.1:62129
+* Userspace file server: ufs starting
+
+X Exiting due to GUEST_MOUNT: mount failed: create folder pre-mount: /bin/bash -c "sudo mkdir -p /mnt/data": Process exited with status 1
+stdout:
+
+stderr:
+mkdir: cannot stat '/mnt/data': Input/output error
+
+* 
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                                          │
+│    * If the above advice does not help, please let us know:                                                              │
+│      https://github.com/kubernetes/minikube/issues/new/choose                                                            │
+│                                                                                                                          │
+│    * Please run `minikube logs --file=logs.txt` and attach logs.txt to the GitHub issue.                                 │
+│    * Please also attach the following file to the GitHub issue:                                                          │
+│    * - /var/folders/80/fywh8vhj4qn_wxrxcntn5k280000gn/T/minikube_mount_c5bcc1d9c7c8f27b3a61e53d8c2d2f3acf66999d_0.log    │
+│                                                                                                                          │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: zadnepr/go-api-test:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: app-env
+        volumeMounts:
+        - name: project-volume
+          mountPath: /app
+      volumes:
+      - name: project-volume
+        persistentVolumeClaim:
+          claimName: project-pvc
