@@ -12,6 +12,15 @@ spec:
       labels:
         app: api
     spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox
+        command: ['sh', '-c', 'until nc -z -v -w30 postgres-service 5432; do echo "Waiting for PostgreSQL..."; sleep 5; done;']
+        env:
+        - name: POSTGRES_HOST
+          value: "postgres-service"
+        - name: POSTGRES_PORT
+          value: "5432"
       containers:
       - name: api
         image: zadnepr/go-api-test:latest
@@ -25,5 +34,6 @@ spec:
           mountPath: /app
       volumes:
       - name: project-volume
-        persistentVolumeClaim:
-          claimName: project-pvc
+        hostPath:
+          path: /mnt/data  # Путь к каталогу на хосте
+          type: Directory

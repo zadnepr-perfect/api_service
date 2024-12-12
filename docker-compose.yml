@@ -1,41 +1,41 @@
-services:
-  hello-api:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    image: zadnepr/go-api-test:latest
-    ports:
-      - "${APP_PORT}:8080"
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-    environment:
-      - APP_PORT=8080  # Указываем порт приложения
-    command: ["air"]  # Запускаем через Air
-    restart: always
-    depends_on:
-      - postgres
-    networks:
-      - app-network
+  services:
+    hello-api:
+      # build:
+      #   context: .
+      #   dockerfile: Dockerfile
+      image: zadnepr/go-api-test:latest
+      ports:
+        - "${APP_PORT}:8080"
+      env_file:
+        - .env
+      volumes:
+        - .:/app
+      environment:
+        - APP_PORT=8080  # Указываем порт приложения
+      command: ["bash", "/usr/local/bin/wait-for-it.sh", "postgres:5432", "--", "air"]  # Запускаем через Air
+      restart: always
+      depends_on:
+        - postgres
+      networks:
+        - app-network
 
 
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "${DB_PORT}:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - app-network
+    postgres:
+      image: postgres:15
+      environment:
+        POSTGRES_DB: ${DB_NAME}
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+      ports:
+        - "${DB_PORT}:5432"
+      volumes:
+        - ./docker/data/postgres:/var/lib/postgresql/data
+      networks:
+        - app-network
 
-networks:
-  app-network:
-    driver: bridge
+  networks:
+    app-network:
+      driver: bridge
 
-volumes:
-  postgres-data:
+  volumes:
+    postgres-data:

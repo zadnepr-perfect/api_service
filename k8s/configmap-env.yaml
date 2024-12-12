@@ -4,6 +4,7 @@ metadata:
   name: app-env
 data:
   APP_PORT: "8080"
+  DB_HOST: "postgres-service"
   DB_NAME: "my_database"
   DB_USER: "my_user"
   DB_PORT: "5432"
