@@ -1,4 +1,4 @@
-`` Разработка и локальный запуск:
+|| Разработка и локальный запуск:
 
 ```
 git clone git@github.com:zadnepr-perfect/go-api.git .
