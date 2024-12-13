@@ -1,5 +1,5 @@
 # Config file for Air
-root = "."
+root = "./cmd/server"
 tmp_dir = "tmp"
 build = "go build -o /app/tmp/main /app/cmd/server"
 bin = "tmp/main"

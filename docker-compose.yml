@@ -1,24 +1,22 @@
   services:
     hello-api:
-      # build:
-      #   context: .
-      #   dockerfile: Dockerfile
-      image: zadnepr/go-api-test:latest
+      image: zadnepr/go-api:latest
       ports:
         - "${APP_PORT}:8080"
       env_file:
         - .env
       volumes:
-        - .:/app
+        - ./scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh  
       environment:
         - APP_PORT=8080  # Указываем порт приложения
-      command: ["bash", "/usr/local/bin/wait-for-it.sh", "postgres:5432", "--", "air"]  # Запускаем через Air
+      command: >
+        /usr/local/bin/wait-for-it.sh postgres:5432 -- 
+        bash -c "go mod tidy && go build -o /app/tmp/main /app/cmd/server && /app/tmp/main"
       restart: always
       depends_on:
         - postgres
       networks:
         - app-network
-
 
     postgres:
       image: postgres:15
@@ -33,6 +31,26 @@
       networks:
         - app-network
 
+    migrate:
+      image: zadnepr/migrate:latest
+      volumes:
+        - ./migrations:/migrations
+        - ./scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh
+      entrypoint: ["/bin/sh", "-c"]
+      environment:
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_PORT=${DB_PORT}
+        - DB_NAME=${DB_NAME}
+      command: >
+          /usr/local/bin/wait-for-it.sh postgres:${DB_PORT} -- \
+          bash -c "migrate -path /migrations -database 'postgres://${DB_USER}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}?sslmode=disable' up && \
+          tail -f /dev/null"
+      depends_on:
+        - postgres
+      networks:
+        - app-network
+    
   networks:
     app-network:
       driver: bridge
