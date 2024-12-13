@@ -12,12 +12,12 @@ http://localhost:8080
 
 ### Для сборки образа
 ```
-docker build -f ./docker/migrate/Dockerfile -t zadnepr/migrate:latest .
+docker build -f ./docker/api/Dockerfile -t zadnepr/go-api:latest .
 ```
 
 ### Для пуша образа в hub
 ```
-docker push zadnepr/migrate:latest    
+docker push zadnepr/go-api:latest    
 ```
 
 # Kubernetes Для интеграционного тестирования
