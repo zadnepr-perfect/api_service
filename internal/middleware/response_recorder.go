@@ -3,6 +3,7 @@ package middleware
 import (
 	"bytes"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -15,6 +16,7 @@ type ResponseRecorder struct {
 
 // Write записывает данные в буфер
 func (r *ResponseRecorder) Write(p []byte) (n int, err error) {
+	log.Printf("Writing response body: %s", string(p)) // Логируем тело ответа
 	n, err = r.body.Write(p)
 	return n, err
 }

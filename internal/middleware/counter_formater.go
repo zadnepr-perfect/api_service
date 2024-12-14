@@ -4,6 +4,7 @@ import (
 	"api/pkg/loggingdb"
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -35,11 +36,14 @@ func CounterMiddleware(loggingModel *loggingdb.RequestLogsModel) echo.Middleware
 				return err
 			}
 
-			// Проверяем статус ответа перед добавлением counter
+			// Проверяем, что статус ответа равен 200 OK перед добавлением counter
 			if c.Response().Status == http.StatusOK {
 				// Читаем тело ответа из буфера
+				log.Println("Before modification, response body:", rec.body.String())
+
 				var responseBody map[string]interface{}
 				if err := json.Unmarshal(rec.body.Bytes(), &responseBody); err != nil {
+					log.Println("Failed to parse response body:", err)
 					return echo.NewHTTPError(http.StatusInternalServerError, "Failed to parse response body")
 				}
 
@@ -49,17 +53,27 @@ func CounterMiddleware(loggingModel *loggingdb.RequestLogsModel) echo.Middleware
 				// Перезаписываем тело ответа с добавленным полем
 				finalResponse, err := json.Marshal(responseBody)
 				if err != nil {
+					log.Println("Failed to marshal modified response:", err)
 					return echo.NewHTTPError(http.StatusInternalServerError, "Failed to marshal response body")
 				}
 
+				// Логируем модифицированный ответ
+				log.Println("Modified response body with counter:", string(finalResponse))
+
+				// Устанавливаем правильный Content-Length
+				c.Response().Header().Set("Content-Length", string(len(finalResponse)))
+
+				// Устанавливаем статус ответа
+				c.Response().WriteHeader(c.Response().Status)
+
 				// Отправляем новый ответ с добавленным полем
-				// Важно: использовать WriteHeader и Write для отправки корректного ответа
-				c.Response().WriteHeader(c.Response().Status) // Устанавливаем статус
-				_, err = c.Response().Write(finalResponse)    // Отправляем тело
+				_, err = c.Response().Write(finalResponse)
 				if err != nil {
+					log.Println("Failed to send response:", err)
 					return echo.NewHTTPError(http.StatusInternalServerError, "Failed to send response")
 				}
 			}
+
 			return nil
 		}
 	}

@@ -33,7 +33,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(database.DatabaseMiddleware(db))
 	e.Use(middlewareLogging.RequestLoggerMiddleware(loggingModel)) // Подключение middleware для логирования
-	e.Use(middlewareLogging.CounterMiddleware(loggingModel))       // Подключение middleware для логирования
+	// e.Use(middlewareLogging.CounterMiddleware(loggingModel))       // Подключение middleware для логирования
 
 	// Регистрация middleware для передачи базы данных в контекст
 	e.Use(database.DatabaseMiddleware(db))
