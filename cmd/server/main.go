@@ -1,11 +1,14 @@
+// main.go
 package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"api/internal/api"
 	"api/internal/database"
 	"api/internal/logging"
+	middlewareLogging "api/internal/middleware"
 	"api/internal/shutdown"
 )
 
@@ -14,13 +17,23 @@ func main() {
 	logger := logging.NewLogger()
 
 	// Инициализация базы данных
-	database.InitDatabase()
-	defer database.CloseDatabase()
+	db, err := database.NewDatabaseConnection()
+	if err != nil {
+		logger.Fatal("Failed to initialize database", err)
+	}
+	defer db.Close()
 
 	// Инициализация маршрутизатора
 	e := echo.New()
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(database.DatabaseMiddleware(db))
+	e.Use(middlewareLogging.RequestLoggerMiddleware()) // Подключение middleware для логирования
 
-	// Регистрация обработчика для endpoint /hello
+	// Регистрация middleware для передачи базы данных в контекст
+	e.Use(database.DatabaseMiddleware(db))
+
+	// Регистрация обработчиков
 	e.GET("/", api.IndexHandler)
 	e.GET("/hello", api.HelloHandler)
 
