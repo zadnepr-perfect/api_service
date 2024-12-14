@@ -1,6 +1,5 @@
 
-/internal
-/docker
+/docker/data
 /tmp
 .DS_Store
 /tmp

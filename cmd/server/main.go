@@ -10,6 +10,7 @@ import (
 	"api/internal/logging"
 	middlewareLogging "api/internal/middleware"
 	"api/internal/shutdown"
+	"api/pkg/loggingdb"
 )
 
 func main() {
@@ -23,12 +24,16 @@ func main() {
 	}
 	defer db.Close()
 
+	// Инициализация модели для работы с request_logs
+	loggingModel := loggingdb.NewRequestLogsModel(db.Conn)
+
 	// Инициализация маршрутизатора
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(database.DatabaseMiddleware(db))
-	e.Use(middlewareLogging.RequestLoggerMiddleware()) // Подключение middleware для логирования
+	e.Use(middlewareLogging.RequestLoggerMiddleware(loggingModel)) // Подключение middleware для логирования
+	e.Use(middlewareLogging.CounterMiddleware(loggingModel))       // Подключение middleware для логирования
 
 	// Регистрация middleware для передачи базы данных в контекст
 	e.Use(database.DatabaseMiddleware(db))
