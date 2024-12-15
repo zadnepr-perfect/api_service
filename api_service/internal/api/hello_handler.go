@@ -1,8 +1,9 @@
 package api
 
 import (
-	"api/config"
 	"net/http"
+
+	"github.com/zadnepr-perfect/api_service/config"
 
 	"github.com/labstack/echo/v4"
 )

@@ -1,12 +1,11 @@
 package middleware
 
 import (
-	"api/pkg/loggingdb"
 	"bytes"
 	"encoding/json"
 	"log"
 	"net/http"
-
+	"github.com/zadnepr-perfect/shared/pkg/loggingdb"
 	"github.com/labstack/echo/v4"
 )
 

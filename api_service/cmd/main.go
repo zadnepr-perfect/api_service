@@ -5,12 +5,12 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"api/internal/api"
-	"api/internal/database"
-	"api/internal/logging"
-	middlewareLogging "api/internal/middleware"
-	"api/internal/shutdown"
-	"api/pkg/loggingdb"
+	"github.com/zadnepr-perfect/api_service/internal/api"
+	"github.com/zadnepr-perfect/api_service/internal/database"
+	"github.com/zadnepr-perfect/api_service/internal/logging"
+	middlewareLogging "github.com/zadnepr-perfect/api_service/internal/middleware"
+	"github.com/zadnepr-perfect/api_service/internal/shutdown"
+	"github.com/zadnepr-perfect/shared/pkg/loggingdb"
 )
 
 func main() {
